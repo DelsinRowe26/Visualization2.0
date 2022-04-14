@@ -22,7 +22,7 @@ namespace WinformsVisualization
         private PitchShifter _pitchShifter;
         private LineSpectrum _lineSpectrum;
         private VoicePrint3DSpectrum _voicePrint3DSpectrum;
-
+        private int stop;
         private readonly Bitmap _bitmap = new Bitmap(2000, 600);
         private int _xpos;
 
@@ -236,6 +236,11 @@ namespace WinformsVisualization
         private void pictureBoxTop_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            stop = 1;
         }
     }
 }
