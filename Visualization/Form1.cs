@@ -25,6 +25,7 @@ namespace WinformsVisualization
         private int stop;
         private readonly Bitmap _bitmap = new Bitmap(2000, 600);
         private int _xpos;
+        private OpenFileDialog openFileDialog;
 
         public Form1()
         {
@@ -33,7 +34,7 @@ namespace WinformsVisualization
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var openFileDialog = new OpenFileDialog()
+            openFileDialog = new OpenFileDialog()
             {
                 Filter = CodecFactory.SupportedFilesFilterEn,
                 Title = "Select a file..."
@@ -59,6 +60,19 @@ namespace WinformsVisualization
                 propertyGridTop.SelectedObject = _lineSpectrum;
                 propertyGridBottom.SelectedObject = _voicePrint3DSpectrum;
             }
+        }
+
+        public ISampleSource BandPassFilter(int sampleRate, int bottomFreq, int topFreq)
+        {
+            var sampleSource = CodecFactory.Instance.GetCodec(openFileDialog.FileName)
+                    .ToSampleSource()
+                    .AppendSource(x => new PitchShifter(x), out _pitchShifter);
+            var tempFilter = sampleSource.AppendSource(x => new BiQuadFilterSource(x));
+            tempFilter.Filter = new HighpassFilter(sampleRate, bottomFreq);
+            var filteredSource = tempFilter.AppendSource(x => new BiQuadFilterSource(x));
+            filteredSource.Filter = new LowpassFilter(sampleRate, topFreq);
+
+            return filteredSource;
         }
 
         private void fromDefaultDeviceToolStripMenuItem_Click(object sender, EventArgs e)
