@@ -23,6 +23,7 @@ namespace WinformsVisualization
         private LineSpectrum _lineSpectrum;
         private VoicePrint3DSpectrum _voicePrint3DSpectrum;
         private int stop;
+        private int click;
         private readonly Bitmap _bitmap = new Bitmap(2000, 600);
         private int _xpos;
         private OpenFileDialog openFileDialog;
@@ -34,6 +35,7 @@ namespace WinformsVisualization
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            click = 1;
             openFileDialog = new OpenFileDialog()
             {
                 Filter = CodecFactory.SupportedFilesFilterEn,
@@ -41,24 +43,36 @@ namespace WinformsVisualization
             };
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                Stop();
                 
-                //open the selected file
-                ISampleSource source = CodecFactory.Instance.GetCodec(openFileDialog.FileName)
-                    .ToSampleSource()
-                    .AppendSource(x => new PitchShifter(x), out _pitchShifter);
+                Stop();
+                do
+                {
+                    //open the selected file
+                    ISampleSource source = CodecFactory.Instance.GetCodec(openFileDialog.FileName)
+                        .ToSampleSource()
+                        .AppendSource(x => new PitchShifter(x), out _pitchShifter);
 
-                SetupSampleSource(source);
+                    /*while(click != 0)
+                    {
+                        if (source.Position == 0.4)
+                        {
+                            source.Position = 0;
+                        }
+                    }*/
 
-                //play the audio
-                _soundOut = new WasapiOut();
-                _soundOut.Initialize(_source);
-                _soundOut.Play();
+                    SetupSampleSource(source);
 
+                    //play the audio
+
+                    _soundOut = new WasapiOut();
+                    _soundOut.Initialize(_source);
+                    _soundOut.Play();
+                } while (click != 0);
                 timer1.Start();
 
-                propertyGridTop.SelectedObject = _lineSpectrum;
-                propertyGridBottom.SelectedObject = _voicePrint3DSpectrum;
+                    propertyGridTop.SelectedObject = _lineSpectrum;
+                    propertyGridBottom.SelectedObject = _voicePrint3DSpectrum;
+                
             }
         }
 
@@ -254,7 +268,8 @@ namespace WinformsVisualization
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            stop = 1;
+            click = 0;
+            Stop();
         }
     }
 }
