@@ -40,6 +40,7 @@
       <HintPath>..\packages\CSCore.Visualization.0.8.9\lib\CSCore.Visualization.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />

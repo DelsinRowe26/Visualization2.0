@@ -11,6 +11,8 @@ using CSCore.Streams;
 using CSCore.Streams.Effects;
 using CSCore.CoreAudioAPI;
 using WinformsVisualization.Visualization;
+using System.Activities.Statements;
+using System.Threading;
 
 namespace WinformsVisualization
 {
@@ -67,6 +69,7 @@ namespace WinformsVisualization
                     _soundOut = new WasapiOut();
                     _soundOut.Initialize(_source);
                     _soundOut.Play();
+                    //Thread.Sleep(200);
                 } while (click != 0);
                 timer1.Start();
 
