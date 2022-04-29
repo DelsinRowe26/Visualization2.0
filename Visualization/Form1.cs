@@ -54,14 +54,6 @@ namespace WinformsVisualization
                         .ToSampleSource()
                         .AppendSource(x => new PitchShifter(x), out _pitchShifter);
 
-                    /*while(click != 0)
-                    {
-                        if (source.Position == 0.4)
-                        {
-                            source.Position = 0;
-                        }
-                    }*/
-
                     SetupSampleSource(source);
 
                     //play the audio
@@ -69,6 +61,7 @@ namespace WinformsVisualization
                     _soundOut = new WasapiOut();
                     _soundOut.Initialize(_source);
                     _soundOut.Play();
+                    //InitializeComponent();
                     //Thread.Sleep(200);
                 } while (click != 0);
                 timer1.Start();
